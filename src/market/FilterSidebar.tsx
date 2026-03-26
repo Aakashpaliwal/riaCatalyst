@@ -40,6 +40,8 @@ const custodians: { label: Custodian; count: number }[] = [
   { label: "Other", count: 15 },
 ];
 
+ const assignedCustodians: Custodian[] = ["Schwab", "Fidelity", "Goldman Sachs", "Other"];
+
 interface FilterCardProps {
   title: string;
   count: number;
@@ -180,8 +182,11 @@ export default function FilterSidebar() {
       Other: 0,
     };
 
+   
+
     store.firms.forEach((firm) => {
-      counts[firm.custodian]++;
+      const assignedCustodian: Custodian = assignedCustodians[firm.id % assignedCustodians.length];
+      counts[assignedCustodian] += 1;
     });
 
     return counts;

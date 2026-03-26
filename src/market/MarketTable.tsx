@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Search, Bookmark, Columns3, Download } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Search, Bookmark, Columns3, Download, SearchX } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useMarketStore, type SortField } from "@/store/marketStore";
 import { toast } from "sonner";
 
@@ -37,7 +38,15 @@ const columnLabels: Record<string, string> = {
   decisionMaker: "Decision Maker",
 };
 
-const sortableColumns: SortField[] = ["totalAum", "advisors", "hnwAumPercent", "acquisitionScore"];
+const sortableColumns: SortField[] = [
+  "name",
+  "location",
+  "decisionMaker",
+  "totalAum",
+  "advisors",
+  "hnwAumPercent",
+  "acquisitionScore",
+];
 
 function ScoreBadge({ score }: { score: number }) {
   let bg = "bg-[#fee2e2] text-[#dc2626]";
@@ -64,11 +73,29 @@ function formatAum(value: number): string {
 export default function MarketTable() {
   const store = useMarketStore();
   const [isSearchSaved, setIsSearchSaved] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const filteredFirms = store.getFilteredFirms();
   const totalPages = store.getTotalPages();
   const startIdx = (store.page - 1) * store.itemsPerPage;
   const paginatedFirms = filteredFirms.slice(startIdx, startIdx + store.itemsPerPage);
   const totalItems = filteredFirms.length;
+
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = window.setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    store.searchQuery,
+    store.selectedAumRanges,
+    store.selectedHnwRanges,
+    store.selectedScoreRanges,
+    store.selectedCustodians,
+    store.page,
+    store.itemsPerPage,
+  ]);
 
   const handleSaveSearch = () => {
     const newSavedState = !isSearchSaved;
@@ -85,8 +112,11 @@ export default function MarketTable() {
         <ArrowDown className="w-3.5 h-3.5 text-[#5265F5]" />
       );
     }
-    return <ArrowUpDown className="w-3.5 h-3.5 text-[#d1d5db] opacity-0 group-hover:opacity-100 transition-opacity" />;
+    // Show an "available to sort" indicator even when not active.
+    return <ArrowUpDown className="w-3.5 h-3.5 text-[#9ca3af] opacity-70 group-hover:opacity-100 transition-opacity" />;
   };
+
+  const showEmptyState = !isLoading && paginatedFirms.length === 0;
 
   return (
     <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
@@ -154,16 +184,18 @@ export default function MarketTable() {
         </div>
       </div>
       {/* Table */}
-      <div className="flex-1 min-h-0 px-6 py-4 bg-[#f8f8fa]">
+      <div className="flex-1 min-h-0 px-6 py-4 bg-[#f1f3f8]">
         <ScrollArea className="h-full w-full rounded-lg border border-[#e5e7eb] bg-white">
           <Table>
-            <TableHeader>
-            <TableRow className="bg-[#f9fafb] hover:bg-[#f9fafb]">
+            <TableHeader className="sticky top-0 z-10 bg-white">
+            <TableRow className="bg-white hover:bg-white">
               {store.visibleColumns.map((col) => (
                 <TableHead
                   key={col}
-                  className={`text-xs font-semibold uppercase tracking-wider text-[#6b7280] whitespace-nowrap ${
-                    sortableColumns.includes(col as SortField) ? "cursor-pointer group select-none" : ""
+                  className={`sticky top-0 z-20 bg-white text-xs font-semibold uppercase tracking-wider text-[#6b7280] whitespace-nowrap ${
+                    sortableColumns.includes(col as SortField)
+                      ? "cursor-pointer group select-none hover:text-foreground transition-colors"
+                      : ""
                   }`}
                   onClick={() => {
                     if (sortableColumns.includes(col as SortField)) {
@@ -180,16 +212,58 @@ export default function MarketTable() {
             </TableRow>
           </TableHeader>
             <TableBody>
-            {paginatedFirms.map((firm, idx) => (
+            {isLoading &&
+              Array.from({ length: Math.min(store.itemsPerPage, 8) }).map((_, idx) => (
+                <TableRow key={`skeleton-${idx}`} className="border-b border-[#e5e7eb]">
+                  {store.visibleColumns.includes("name") && (
+                    <TableCell>
+                      <Skeleton className="h-4 w-44" />
+                    </TableCell>
+                  )}
+                  {store.visibleColumns.includes("location") && (
+                    <TableCell>
+                      <Skeleton className="h-4 w-32" />
+                    </TableCell>
+                  )}
+                  {store.visibleColumns.includes("totalAum") && (
+                    <TableCell>
+                      <Skeleton className="h-4 w-24" />
+                    </TableCell>
+                  )}
+                  {store.visibleColumns.includes("advisors") && (
+                    <TableCell>
+                      <Skeleton className="h-4 w-12" />
+                    </TableCell>
+                  )}
+                  {store.visibleColumns.includes("hnwAumPercent") && (
+                    <TableCell>
+                      <Skeleton className="h-4 w-14" />
+                    </TableCell>
+                  )}
+                  {store.visibleColumns.includes("acquisitionScore") && (
+                    <TableCell>
+                      <Skeleton className="h-7 w-10 rounded-md" />
+                    </TableCell>
+                  )}
+                  {store.visibleColumns.includes("decisionMaker") && (
+                    <TableCell>
+                      <Skeleton className="h-4 w-36" />
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+
+            {!isLoading && paginatedFirms.map((firm, idx) => (
               <motion.tr
                 key={firm.id}
                 initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.15, delay: idx * 0.02 }}
-                className="border-b border-[#e5e7eb] hover:bg-[#f9fafb] transition-colors cursor-pointer group"
+                onClick={() => toast(`${firm.name} • ${firm.location}`, { position: "top-center" })}
+                className="border-b border-[#e5e7eb] hover:bg-[#f3f4f6] transition-colors cursor-pointer group"
               >
                 {store.visibleColumns.includes("name") && (
-                  <TableCell className="font-medium text-foreground whitespace-nowrap text-sm">
+                  <TableCell className="font-medium text-foreground whitespace-nowrap text-sm text-[#5265F5]">
                     {firm.name}
                   </TableCell>
                 )}
@@ -225,6 +299,30 @@ export default function MarketTable() {
                 )}
               </motion.tr>
             ))}
+
+            {showEmptyState && (
+              <TableRow>
+                <TableCell colSpan={Math.max(store.visibleColumns.length, 1)} className="py-16">
+                  <div className="flex flex-col items-center justify-center text-center gap-4">
+                    <div className="rounded-full p-3 bg-[#f3f4f6] text-[#6b7280]">
+                      <SearchX className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">No firms match your current filters</p>
+                      <p className="text-xs text-[#6b7280] mt-1">Try broadening your search or reset all filters.</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => store.clearAllFilters()}
+                      className="border-[#e5e7eb]"
+                    >
+                      Clear All Filters
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
             </TableBody>
           </Table>
         </ScrollArea>
@@ -253,7 +351,7 @@ export default function MarketTable() {
           <span>
             Page {store.page} of {totalPages || 1}
           </span>
-          <span className="text-xs">({totalItems} results)</span>
+          <span className="text-xs">({isLoading ? "Loading..." : `${totalItems} results`})</span>
 
           <Button
             variant="ghost"

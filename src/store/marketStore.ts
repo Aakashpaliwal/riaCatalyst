@@ -16,7 +16,14 @@ export type HnwRange = "85% to 100%" | "65% to 85%" | "45% to 65%" | "0% to 45%"
 export type ScoreRange = "high" | "moderate" | "low";
 export type Custodian = "Schwab" | "Fidelity" | "Goldman Sachs" | "Other";
 
-export type SortField = "totalAum" | "advisors" | "hnwAumPercent" | "acquisitionScore";
+export type SortField =
+  | "name"
+  | "location"
+  | "decisionMaker"
+  | "totalAum"
+  | "advisors"
+  | "hnwAumPercent"
+  | "acquisitionScore";
 export type SortDirection = "asc" | "desc";
 
 interface MarketState {
@@ -59,6 +66,7 @@ interface MarketState {
   setItemsPerPage: (n: number) => void;
   toggleColumn: (col: string) => void;
   clearFilters: (type: "aum" | "hnw" | "score" | "custodian") => void;
+  clearAllFilters: () => void;
   getFilteredFirms: () => Firm[];
   getTotalPages: () => number;
   getActiveFilterCount: () => number;
@@ -267,6 +275,19 @@ export const useMarketStore = create<MarketState>((set, get) => ({
     }
   },
 
+  clearAllFilters: () =>
+    set({
+      searchQuery: "",
+      filterSearch: "",
+      selectedAumRanges: [],
+      selectedHnwRanges: [],
+      selectedScoreRanges: [],
+      selectedCustodians: [],
+      smartSearch: false,
+      outpacesGrowth: false,
+      page: 1,
+    }),
+
   getFilteredFirms: () => {
     const s = get();
     let filtered = [...s.firms];
@@ -342,7 +363,15 @@ export const useMarketStore = create<MarketState>((set, get) => ({
       filtered.sort((a, b) => {
         const aVal = a[s.sortField!];
         const bVal = b[s.sortField!];
-        return s.sortDirection === "asc" ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number);
+        if (typeof aVal === "string" && typeof bVal === "string") {
+          const cmp = aVal.localeCompare(bVal, undefined, { sensitivity: "base" });
+          return s.sortDirection === "asc" ? cmp : -cmp;
+        }
+
+        const aNum = Number(aVal);
+        const bNum = Number(bVal);
+        const cmp = aNum - bNum;
+        return s.sortDirection === "asc" ? cmp : -cmp;
       });
     }
 
