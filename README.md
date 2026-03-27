@@ -1,73 +1,21 @@
-# React + TypeScript + Vite
+# RIA Catalyst - Market Screener Prototype
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A production-ready frontend prototype for the RIA Catalyst Market Screener, built with React, Vite, Tailwind CSS, and shadcn/ui.
 
-Currently, two official plugins are available:
+## 🚀 Architectural Decisions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. **State Management (Zustand):** Implemented a centralized `marketStore` to handle complex multi-parameter filtering, sorting, and pagination. This keeps the React components strictly focused on rendering rather than business logic.
+2. **Component Isolation:** Separated the `FilterSidebar`, `MarketTable`, and navigation into distinct feature modules (`src/market`) while keeping primitive UI building blocks segregated in `src/components/ui`.
+3. **Strict Type Contracts:** Defined a robust `Firm` interface (`src/types`) to ensure absolute type safety across the application, anticipating future GraphQL/REST API integration.
+4. **Deterministic Mocking:** Used modulo-based hashing to dynamically assign relational data (like Custodians) to the mock dataset, keeping the source data lightweight while ensuring consistent renders.
 
-## React Compiler
+## 💡 Trade-offs & Future Scaling
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Filter Memoization:** Currently, derived state (filtered & sorted firms) is calculated on the fly within the Zustand store. For the current mock dataset, this is highly performant. When scaling to 50,000+ RIA firms, I would offload this to a custom `useMemo` hook or implement server-side filtering via React Query to prevent main-thread blocking.
+* **Virtualization:** For a production screener handling massive lists, I would implement `@tanstack/react-virtual` to render only the visible table rows and protect DOM performance.
 
-## Expanding the ESLint configuration
+## 🛠️ How to Run Locally
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+```bash
+npm install
+npm run dev
