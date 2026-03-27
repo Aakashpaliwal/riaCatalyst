@@ -4,13 +4,8 @@ import { Search, ChevronDown, ChevronUp, Zap, TrendingUp, X } from "lucide-react
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  useMarketStore,
-  type AumRange,
-  type HnwRange,
-  type ScoreRange,
-  type Custodian,
-} from "@/store/marketStore";
+import { useMarketStore } from "@/store/marketStore";
+import type { AumRange, HnwRange, ScoreRange, Custodian } from "@/types/market";
 
 const aumRanges: { label: AumRange; count: number }[] = [
   { label: "$0M - $50M", count: 30 },

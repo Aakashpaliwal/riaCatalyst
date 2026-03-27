@@ -25,7 +25,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useMarketStore, type SortField } from "@/store/marketStore";
+import { useMarketStore } from "@/store/marketStore";
+import type { SortField } from "@/types/market";
 import { toast } from "sonner";
 
 const columnLabels: Record<string, string> = {
