@@ -7,7 +7,7 @@ export default function TopNav() {
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="flex items-center justify-between px-6 py-3 bg-white border-b border-[#e5e7eb]"
+      className="flex items-center justify-between px-6 py-3 bg-white dark:bg-gray-900 border-b border-[#e5e7eb] dark:border-gray-700"
     >
       <div className="flex items-center gap-6">
         {/* Logo */}
@@ -23,7 +23,7 @@ export default function TopNav() {
           <input
             type="text"
             placeholder="Search by name or CRD..."
-            className="pl-10 pr-4 py-2 w-56 rounded-lg bg-[#f3f4f6] text-sm text-foreground placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-[#5265F5]/30 border-none transition-all"
+            className="pl-10 pr-4 py-2 w-56 rounded-lg bg-[#f3f4f6] dark:bg-gray-800 text-sm text-foreground placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-[#5265F5]/30 border-none transition-all"
           />
         </div>
       </div>
@@ -32,7 +32,7 @@ export default function TopNav() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative p-2.5 rounded-lg hover:bg-[#f3f4f6] transition-colors"
+          className="relative p-2.5 rounded-lg hover:bg-[#f3f4f6] dark:hover:bg-gray-800 transition-colors"
         >
           <Bell className="w-5 h-5 text-[#6b7280]" />
           <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500" />

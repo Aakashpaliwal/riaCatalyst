@@ -57,11 +57,11 @@ function FilterCard({ title, count, onClear, children, defaultOpen = true }: Fil
   return (
     <motion.div
       layout
-      className="rounded-lg border border-[#e5e7eb] bg-white overflow-hidden"
+      className="rounded-lg border border-[#e5e7eb] dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden"
     >
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full px-4 py-3 text-sm font-medium text-foreground hover:bg-[#f9fafb] transition-colors"
+        className="flex items-center justify-between w-full px-4 py-3 text-sm font-medium text-foreground hover:bg-[#f9fafb] dark:hover:bg-gray-700 transition-colors"
       >
         <span className="flex items-center gap-2 font-semibold text-[13px]">
           {title}
@@ -72,9 +72,9 @@ function FilterCard({ title, count, onClear, children, defaultOpen = true }: Fil
           )}
         </span>
         {open ? (
-          <ChevronUp className="w-4 h-4 text-[#6b7280]" />
+          <ChevronUp className="w-4 h-4 text-[#6b7280] dark:text-gray-400" />
         ) : (
-          <ChevronDown className="w-4 h-4 text-[#6b7280]" />
+          <ChevronDown className="w-4 h-4 text-[#6b7280] dark:text-gray-400" />
         )}
       </button>
 
@@ -198,11 +198,11 @@ export default function FilterSidebar() {
   const custodianCounts = getCustodianCounts();
 
   return (
-    <div className="w-72 border-r border-[#e5e7eb] bg-white flex flex-col h-full overflow-hidden">
+    <div className="w-72 border-r border-[#e5e7eb] dark:border-gray-700 bg-white dark:bg-gray-900 flex flex-col h-full overflow-hidden">
       {/* Filter header */}
-      <div className="px-4 pt-5 pb-3 border-b border-[#e5e7eb] flex-shrink-0">
+      <div className="px-4 pt-5 pb-3 border-b border-[#e5e7eb] dark:border-gray-700 flex-shrink-0">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-foreground dark:text-gray-100 flex items-center gap-2">
             Filters
             {store.getActiveFilterCount() > 0 && (
               <span className="flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-[#5265F5] text-white text-[10px] font-bold">
@@ -220,7 +220,7 @@ export default function FilterSidebar() {
             placeholder="Search by filter parameters"
             value={store.filterSearch}
             onChange={(e) => store.setFilterSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-[#f3f4f6] text-xs text-foreground placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-[#5265F5]/30 transition-all border-none"
+            className="w-full pl-9 pr-3 py-2 rounded-lg bg-[#f3f4f6] dark:bg-gray-800 text-xs text-foreground placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-[#5265F5]/30 transition-all border-none"
           />
         </div>
       </div>
@@ -228,19 +228,19 @@ export default function FilterSidebar() {
       <ScrollArea className="flex-1 overflow-hidden">
         <div className="p-4 space-y-3 pr-4">
           {/* Shortcuts */}
-          <div className="rounded-lg border border-[#e5e7eb] bg-white p-4 space-y-3">
-            <h3 className="text-xs font-semibold text-[#6b7280] uppercase tracking-wider">
+          <div className="rounded-lg border border-[#e5e7eb] dark:border-gray-700 bg-white dark:bg-gray-800 p-4 space-y-3">
+            <h3 className="text-xs font-semibold text-[#6b7280] dark:text-gray-400 uppercase tracking-wider">
               Shortcuts
             </h3>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-2 text-sm text-foreground">
+              <span className="flex items-center gap-2 text-sm text-foreground dark:text-gray-100">
                 <Zap className="w-3.5 h-3.5 text-[#5265F5]" />
                 Smart Search
               </span>
               <Switch checked={store.smartSearch} onCheckedChange={store.setSmartSearch} />
             </div>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-2 text-sm text-foreground">
+              <span className="flex items-center gap-2 text-sm text-foreground dark:text-gray-100">
                 <TrendingUp className="w-3.5 h-3.5 text-[#10b981]" />
                 Outpaces market growth
               </span>
@@ -249,7 +249,7 @@ export default function FilterSidebar() {
           </div>
 
           {/* Firm Metrics Header */}
-          <h3 className="text-xs font-semibold text-[#6b7280] uppercase tracking-wider pt-1">
+          <h3 className="text-xs font-semibold text-[#6b7280] dark:text-gray-400 uppercase tracking-wider pt-1">
             Firm Metrics
           </h3>
 

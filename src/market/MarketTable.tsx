@@ -121,7 +121,7 @@ export default function MarketTable() {
   return (
     <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
       {/* Top bar */}
-      <div className="px-6 py-4 border-b border-[#e5e7eb] bg-white flex-shrink-0">
+      <div className="px-6 py-4 border-b border-[#e5e7eb] dark:border-gray-700 bg-white dark:bg-gray-900 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h4 className="text-xl font-semibold text-foreground">Market Insights</h4>
@@ -137,7 +137,7 @@ export default function MarketTable() {
                 placeholder="Search by company name..."
                 value={store.searchQuery}
                 onChange={(e) => store.setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-72 rounded-lg bg-[#f3f4f6] text-sm text-foreground placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-[#5265F5]/30 transition-all border-none"
+                className="pl-10 pr-4 py-2 w-72 rounded-lg bg-[#f3f4f6] dark:bg-gray-800 text-sm text-foreground placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-[#5265F5]/30 transition-all border-none"
               />
             </div>
             <Button
@@ -147,7 +147,7 @@ export default function MarketTable() {
               className={`font-medium gap-1.5 border transition-all duration-200 cursor-pointer ${
                 isSearchSaved
                   ? "border-[#5265F5] bg-[#5265F5] text-white"
-                  : "border-[#e5e7eb] text-[#5265F5] hover:border-[#5265F5] hover:bg-[#5265F5] hover:text-white"
+                  : "border-[#e5e7eb] dark:border-gray-600 text-[#5265F5] hover:border-[#5265F5] hover:bg-[#5265F5] hover:text-white"
               }`}
             >
               <Bookmark className={`w-4 h-4 ${isSearchSaved ? "fill-current" : ""}`} />
@@ -158,7 +158,7 @@ export default function MarketTable() {
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-1.5 text-[#6b7280] border-[#e5e7eb]">
+                <Button variant="outline" size="sm" className="gap-1.5 text-[#6b7280] dark:text-gray-400 border-[#e5e7eb] dark:border-gray-700">
                   <Columns3 className="w-4 h-4" />
                   Columns
                 </Button>
@@ -176,7 +176,7 @@ export default function MarketTable() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button variant="outline" size="sm" className="gap-1.5 text-[#6b7280] border-[#e5e7eb]">
+            <Button variant="outline" size="sm" className="gap-1.5 text-[#6b7280] dark:text-gray-400 border-[#e5e7eb] dark:border-gray-700">
               <Download className="w-4 h-4" />
               Export
             </Button>
@@ -184,15 +184,15 @@ export default function MarketTable() {
         </div>
       </div>
       {/* Table */}
-      <div className="flex-1 min-h-0 px-6 py-4 bg-[#f1f3f8]">
-        <ScrollArea className="h-full w-full rounded-lg border border-[#e5e7eb] bg-white">
+      <div className="flex-1 min-h-0 px-6 py-4 bg-[#f1f3f8] dark:bg-gray-950">
+        <ScrollArea className="h-full w-full rounded-lg border border-[#e5e7eb] dark:border-gray-700 bg-white dark:bg-gray-900">
           <Table>
-            <TableHeader className="sticky top-0 z-10 bg-white">
-            <TableRow className="bg-white hover:bg-white">
+            <TableHeader className="sticky top-0 z-10 bg-white dark:bg-gray-800">
+            <TableRow className="bg-white hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-800">
               {store.visibleColumns.map((col) => (
                 <TableHead
                   key={col}
-                  className={`sticky top-0 z-20 bg-white text-xs font-semibold uppercase tracking-wider text-[#6b7280] whitespace-nowrap ${
+                  className={`sticky top-0 z-20 bg-white dark:bg-gray-800 text-xs font-semibold uppercase tracking-wider text-[#6b7280] dark:text-gray-400 whitespace-nowrap ${
                     sortableColumns.includes(col as SortField)
                       ? "cursor-pointer group select-none hover:text-foreground transition-colors"
                       : ""
@@ -214,7 +214,7 @@ export default function MarketTable() {
             <TableBody>
             {isLoading &&
               Array.from({ length: Math.min(store.itemsPerPage, 8) }).map((_, idx) => (
-                <TableRow key={`skeleton-${idx}`} className="border-b border-[#e5e7eb]">
+                <TableRow key={`skeleton-${idx}`} className="border-b border-[#e5e7eb] dark:border-gray-700">
                   {store.visibleColumns.includes("name") && (
                     <TableCell>
                       <Skeleton className="h-4 w-44" />
@@ -260,7 +260,7 @@ export default function MarketTable() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.15, delay: idx * 0.02 }}
                 onClick={() => toast(`${firm.name} • ${firm.location}`, { position: "top-center" })}
-                className="border-b border-[#e5e7eb] hover:bg-[#f3f4f6] transition-colors cursor-pointer group"
+                className="border-b border-[#e5e7eb] dark:border-gray-700 hover:bg-[#f3f4f6] dark:hover:bg-gray-800 transition-colors cursor-pointer group"
               >
                 {store.visibleColumns.includes("name") && (
                   <TableCell className="font-medium text-foreground whitespace-nowrap text-sm text-[#5265F5]">
@@ -268,7 +268,7 @@ export default function MarketTable() {
                   </TableCell>
                 )}
                 {store.visibleColumns.includes("location") && (
-                  <TableCell className="text-[#6b7280] whitespace-nowrap text-sm">
+                  <TableCell className="text-[#6b7280] dark:text-gray-400 whitespace-nowrap text-sm">
                     {firm.location}
                   </TableCell>
                 )}
@@ -304,18 +304,18 @@ export default function MarketTable() {
               <TableRow>
                 <TableCell colSpan={Math.max(store.visibleColumns.length, 1)} className="py-16">
                   <div className="flex flex-col items-center justify-center text-center gap-4">
-                    <div className="rounded-full p-3 bg-[#f3f4f6] text-[#6b7280]">
+                    <div className="rounded-full p-3 bg-[#f3f4f6] dark:bg-gray-700 text-[#6b7280] dark:text-gray-300">
                       <SearchX className="w-6 h-6" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-foreground">No firms match your current filters</p>
-                      <p className="text-xs text-[#6b7280] mt-1">Try broadening your search or reset all filters.</p>
+                      <p className="text-xs text-[#6b7280] dark:text-gray-400 mt-1">Try broadening your search or reset all filters.</p>
                     </div>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => store.clearAllFilters()}
-                      className="border-[#e5e7eb]"
+                      className="border-[#e5e7eb] dark:border-gray-600"
                     >
                       Clear All Filters
                     </Button>
@@ -329,8 +329,8 @@ export default function MarketTable() {
       </div>
 
       {/* Pagination */}
-      <div className="px-6 py-3 border-t border-[#e5e7eb] bg-white flex-shrink-0 flex items-center justify-between">
-        <div className="flex items-center gap-3 text-sm text-[#6b7280]">
+      <div className="px-6 py-3 border-t border-[#e5e7eb] dark:border-gray-700 bg-white dark:bg-gray-900 flex-shrink-0 flex items-center justify-between">
+          <div className="flex items-center gap-3 text-sm text-[#6b7280] dark:text-gray-400">
           <Select
             value={String(store.itemsPerPage)}
             onValueChange={(v) => store.setItemsPerPage(Number(v))}
@@ -347,7 +347,7 @@ export default function MarketTable() {
           <span>items per page</span>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-[#6b7280]">
+          <div className="flex items-center gap-2 text-sm text-[#6b7280] dark:text-gray-400">
           <span>
             Page {store.page} of {totalPages || 1}
           </span>
