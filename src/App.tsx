@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import TopNav from '@/market/TopNav'
 import IconNav from '@/market/IconNav'
