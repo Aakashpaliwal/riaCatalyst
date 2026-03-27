@@ -260,11 +260,14 @@ export const useMarketStore = create<MarketState>((set, get) => ({
   setItemsPerPage: (n) => set({ itemsPerPage: n, page: 1 }),
 
   toggleColumn: (col) =>
-    set((s) => ({
-      visibleColumns: s.visibleColumns.includes(col)
-        ? s.visibleColumns.filter((c) => c !== col)
-        : [...s.visibleColumns, col],
-    })),
+    set((s) => {
+      if (s.visibleColumns.includes(col)) {
+        return { visibleColumns: s.visibleColumns.filter((c) => c !== col) };
+      }
+
+      const nextVisible = new Set([...s.visibleColumns, col]);
+      return { visibleColumns: allColumns.filter((c) => nextVisible.has(c)) };
+    }),
 
   clearFilters: (type) => {
     switch (type) {

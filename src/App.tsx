@@ -7,7 +7,6 @@ import MarketTable from '@/market/MarketTable'
 import { Toaster } from '@/components/ui/sonner'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
