@@ -9,7 +9,6 @@ A production-ready frontend prototype for the RIA Catalyst Market Screener, buil
 1. **State Management (Zustand):** Implemented a centralized `marketStore` to handle complex multi-parameter filtering, sorting, and pagination. This keeps the React components strictly focused on rendering rather than business logic.
 2. **Component Isolation:** Separated the `FilterSidebar`, `MarketTable`, and navigation into distinct feature modules (`src/market`) while keeping primitive UI building blocks segregated in `src/components/ui`.
 3. **Strict Type Contracts:** Defined a robust `Firm` interface (`src/types`) to ensure absolute type safety across the application, anticipating future GraphQL/REST API integration.
-4. **Deterministic Mocking:** Used modulo-based hashing to dynamically assign relational data (like Custodians) to the mock dataset, keeping the source data lightweight while ensuring consistent renders.
 
 ## 💡 Trade-offs & Future Scaling
 
