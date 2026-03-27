@@ -2,6 +2,8 @@
 
 A production-ready frontend prototype for the RIA Catalyst Market Screener, built with React, Vite, Tailwind CSS, and shadcn/ui.
 
+**🔴 Live Demo:** [https://riacatalyst.onrender.com/](https://riacatalyst.onrender.com/)
+
 ## 🚀 Architectural Decisions
 
 1. **State Management (Zustand):** Implemented a centralized `marketStore` to handle complex multi-parameter filtering, sorting, and pagination. This keeps the React components strictly focused on rendering rather than business logic.
